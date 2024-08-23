@@ -1,0 +1,31 @@
+name: Pull Request Template Selector
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  template-selector:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Comment on Pull Request
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const templates = `
+          ## Pull Request Templates
+
+          Please select the appropriate template for your pull request:
+
+          - [Bug Fix](.github/PULL_REQUEST_TEMPLATE/bug_fix.md)
+          - [Feature Request](.github/PULL_REQUEST_TEMPLATE/feature_request.md)
+          - [Documentation Update](.github/PULL_REQUEST_TEMPLATE/documentation_update.md)
+          `;
+
+          const issueComment = context.issue.number;
+          const comment = context.github.issues.createComment({
+            ...context.repo,
+            issue_number: issueComment,
+            body: templates
+          });

@@ -12,6 +12,7 @@ jobs:
     - name: Comment on Pull Request
       uses: actions/github-script@v4
       with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const templates = `
           ## Pull Request Templates
@@ -23,9 +24,10 @@ jobs:
           - [Documentation Update](.github/PULL_REQUEST_TEMPLATE/documentation_update.md)
           `;
 
-          const issueComment = context.issue.number;
-          const comment = context.github.issues.createComment({
-            ...context.repo,
-            issue_number: issueComment,
+          const issue_number = context.payload.pull_request.number;
+          await github.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issue_number,
             body: templates
           });

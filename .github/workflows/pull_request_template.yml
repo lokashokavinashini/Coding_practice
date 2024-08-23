@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Comment on Pull Request
       uses: actions/github-script@v4
       with:
@@ -25,7 +28,7 @@ jobs:
           `;
 
           const issue_number = context.payload.pull_request.number;
-          await github.issues.createComment({
+          await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: issue_number,

@@ -6,8 +6,8 @@ def get_user_choice():
 
 def get_computer_choice():
     """ To get computer's choice"""
-    pass()
+    pass
 
 def determine_winner():
     """ Determine who is the winner and display the result """
-    pass()
+    pass

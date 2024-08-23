@@ -8,11 +8,15 @@ jobs:
   select-template:
     runs-on: ubuntu-latest
     steps:
-      - name: Select PR template
+      - name: Apply PR Template
         run: |
-          if [[ "$GITHUB_EVENT_LABEL" == "feature" ]]; then
-            echo "Feature Template Content" > pr_template.md
-          elif [[ "$GITHUB_EVENT_LABEL" == "bugfix" ]]; then
-            echo "Bugfix Template Content" > pr_template.md
+          if [[ "${{ github.event.pull_request.labels }}" == *"feature"* ]]; then
+            echo "$(cat .github/PULL_REQUEST_TEMPLATE/feature_template.md)" > pr_body.md
+          elif [[ "${{ github.event.pull_request.labels }}" == *"bugfix"* ]]; then
+            echo "$(cat .github/PULL_REQUEST_TEMPLATE/bugfix_template.md)" > pr_body.md
+          else
+            echo "$(cat .github/PULL_REQUEST_TEMPLATE/default_template.md)" > pr_body.md
           fi
-          gh pr edit ${{ github.event.pull_request.number }} --body "$(cat pr_template.md)"
+          
+      - name: Update PR Description
+        run: gh pr edit ${{ github.event.pull_request.number }} --body "$(cat pr_body.md)"

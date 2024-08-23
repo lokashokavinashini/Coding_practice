@@ -1,36 +1,18 @@
-name: Pull Request Template Selector
+name: PR Template Selector
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, edited]
 
 jobs:
-  template-selector:
+  select-template:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Comment on Pull Request
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const templates = `
-          ## Pull Request Templates
-
-          Please select the appropriate template for your pull request:
-
-          - [Bug Fix](.github/PULL_REQUEST_TEMPLATE/bug_fix.md)
-          - [Feature Request](.github/PULL_REQUEST_TEMPLATE/feature_request.md)
-          - [Documentation Update](.github/PULL_REQUEST_TEMPLATE/documentation_update.md)
-          `;
-
-          const issue_number = context.payload.pull_request.number;
-          await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: issue_number,
-            body: templates
-          });
+      - name: Select PR template
+        run: |
+          if [[ "$GITHUB_EVENT_LABEL" == "feature" ]]; then
+            echo "Feature Template Content" > pr_template.md
+          elif [[ "$GITHUB_EVENT_LABEL" == "bugfix" ]]; then
+            echo "Bugfix Template Content" > pr_template.md
+          fi
+          gh pr edit ${{ github.event.pull_request.number }} --body "$(cat pr_template.md)"

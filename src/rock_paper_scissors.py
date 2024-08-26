@@ -22,4 +22,4 @@ def determine_winner(user_choice, computer_choice):
 user_choice = get_user_choice()
 computer_choice = get_computer_choice()
 result = determine_winner(user_choice, computer_choice)
-print(result)
+print("Winner is : ",result)

@@ -1,14 +1,11 @@
 """ A script for playing Rock, Paper, Scissors with Computer """
-
 import random
-
-
 def get_user_choice():
-    """
+    '''
     Prompts the user to enter their choice of Rock, Paper, or Scissors.
     Converts the input to lowercase to ensure case insensitivity.
     Returns the user's choice if it's valid; otherwise, prompts again.
-    """
+    '''
     choice = input("Enter Rock, Paper, or Scissors: ").lower()
     if choice not in ["rock", "paper", "scissors"]:
         print("Invalid choice, please try again.")
